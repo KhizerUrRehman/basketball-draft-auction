@@ -1,5 +1,5 @@
 import React from 'react';
-import rbl from "./assets/rbl.jpg";
+import rbl from "../assets/rbl.jpg";
 
 function Home() {
   return (
