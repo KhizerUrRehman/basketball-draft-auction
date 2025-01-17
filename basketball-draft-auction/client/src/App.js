@@ -52,7 +52,7 @@ function App() {
   <ul className="nav-links">
     <li><Link to="/home">Home</Link></li>
     <li><Link to="/captains">Captains</Link></li>
-    <li><Link to="/player-pool">Player Pool</Link></li>
+    <li><Link to="/auction">Auction</Link></li>
     <li><Link to="/player-pool">Player Pool</Link></li>
     <li><Link to="/draft-master">Draft Master</Link></li>
   </ul>
