@@ -8,7 +8,7 @@ const Captains = () => {
 
   const fetchCaptains = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/captains");
+      const response = await fetch("https://rbl-auction.onrender.com/api/captains");
       const data = await response.json();
       setCaptains(data);
       setError(null);

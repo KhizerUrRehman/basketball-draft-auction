@@ -14,12 +14,12 @@ const AuctionScreen = () => {
   const fetchAuctionData = async () => {
     try {
       const playerResponse = await fetch(
-        "http://localhost:5000/api/players?auctioned=false"
+        "https://rbl-auction.onrender.com/api/players?auctioned=false"
       );
       const playerData = await playerResponse.json();
       setPlayers(playerData);
 
-      const captainResponse = await fetch("http://localhost:5000/api/captains");
+      const captainResponse = await fetch("https://rbl-auction.onrender.com/api/captains");
       const captainData = await captainResponse.json();
       setCaptains(captainData);
     } catch (error) {
@@ -31,7 +31,7 @@ const AuctionScreen = () => {
     const selectedPlayer = players.find((player) => player._id === playerId);
 
     try {
-      const captainResponse = await fetch("http://localhost:5000/api/captains");
+      const captainResponse = await fetch("https://rbl-auction.onrender.com/api/captains");
       const updatedCaptains = await captainResponse.json();
       setCaptains(updatedCaptains);
 
@@ -76,7 +76,7 @@ const AuctionScreen = () => {
 
     try {
       await fetch(
-        `http://localhost:5000/api/players/${currentPlayer._id}/assign`,
+        `https://rbl-auction.onrender.com/api/players/${currentPlayer._id}/assign`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -88,7 +88,7 @@ const AuctionScreen = () => {
       );
 
       await fetch(
-        `http://localhost:5000/api/captains/${winningBid.captainId}/deduct-budget`,
+        `https://rbl-auction.onrender.com/api/captains/${winningBid.captainId}/deduct-budget`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

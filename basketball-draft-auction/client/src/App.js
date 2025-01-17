@@ -9,12 +9,13 @@ import PlayerPool from './pages/PlayerPool';
 import LogPage from "./components/LogPage"; // New log page
 import logo from "./assets/lob.jpg"; // Import the logo
 
+/*
+
 function App() {
-  return (
+  return ( 
     <Router>
       <div className="App">
-        {/* Navigation Menu */}
-        <nav className="navbar">
+        <nav className="navbar">  
   <ul className="nav-links">
     <li><a href="/home">Home</a></li>
     <li><a href="/auction">Auction</a></li>
@@ -24,17 +25,48 @@ function App() {
   </ul>
   <h1 className="navbar-title">RBL AUCTION</h1>
   <img src={logo} alt="Company Logo" className="logo" />
-</nav>
+</nav> 
 
 
-        {/* Define Routes */}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/auction" element={<AuctionScreen />} />
           <Route path="/captains" element={<Captains />} />
           <Route path="/player-pool" element={<PlayerPool />} />
           <Route path="/draft-master" element={<DraftMaster />} />
-          <Route path="/logs" element={<LogPage />} /> {/* Log Page */}
+          <Route path="/logs" element={<LogPage />} /> 
+          <Route path="/home" element={<Home />} /> 
+        </Routes>
+      </div>
+    </Router>
+  );
+}
+
+*/
+
+function App() {
+  return ( 
+    <Router>
+      <div className="App">
+        <nav className="navbar">  
+  <ul className="nav-links">
+    <li><a href="/home">Home</a></li>
+    <li><a href="/captains">Captains</a></li>
+    <li><a href="/player-pool">Player Pool</a></li>
+  </ul>
+  <h1 className="navbar-title">RBL AUCTION</h1>
+  <img src={logo} alt="Company Logo" className="logo" />
+</nav> 
+
+
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/auction" element={<AuctionScreen />} />
+          <Route path="/captains" element={<Captains />} />
+          <Route path="/player-pool" element={<PlayerPool />} />
+          <Route path="/draft-master" element={<DraftMaster />} />
+          <Route path="/logs" element={<LogPage />} /> 
+          <Route path="/home" element={<Home />} /> 
         </Routes>
       </div>
     </Router>

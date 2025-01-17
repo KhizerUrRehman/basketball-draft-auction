@@ -15,13 +15,13 @@ const DraftMaster = () => {
   const fetchData = async () => {
     try {
       const playerResponse = await fetch(
-        "http://localhost:5000/api/players?auctioned=false"
+        "https://rbl-auction.onrender.com/api/players?auctioned=false"
       );
       const playerData = await playerResponse.json();
       setPlayers(playerData);
       setFilteredPlayers(playerData);
 
-      const captainResponse = await fetch("http://localhost:5000/api/captains");
+      const captainResponse = await fetch("https://rbl-auction.onrender.com/api/captains");
       const captainData = await captainResponse.json();
       setCaptains(captainData);
     } catch (error) {
@@ -35,20 +35,24 @@ const DraftMaster = () => {
       return;
     }
     try {
-      await fetch(`http://localhost:5000/api/players/${playerId}/assign`, {
+      await fetch(`https://rbl-auction.onrender.com/api/players/${playerId}/assign`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ captainId }),
+        body: JSON.stringify({ 
+          captainId,
+          price: 0  // <--- add price: 0 here
+        }),
       });
       fetchData(); // Refresh data after assignment
     } catch (error) {
       console.error("Error assigning player:", error);
     }
   };
+  
 
   const removePlayer = async (playerId) => {
     try {
-      await fetch(`http://localhost:5000/api/players/${playerId}`, {
+      await fetch(`https://rbl-auction.onrender.com/api/players/${playerId}`, {
         method: "DELETE",
       });
       fetchData(); // Refresh data after removal
@@ -78,7 +82,7 @@ const DraftMaster = () => {
       return;
     }
     try {
-      await fetch(`http://localhost:5000/api/players/${playerId}`, {
+      await fetch(`https://rbl-auction.onrender.com/api/players/${playerId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ startingPrice: newPrice }),
@@ -115,7 +119,7 @@ const DraftMaster = () => {
       return;
     }
     try {
-      await fetch(`http://localhost:5000/api/captains/${captainId}/budget`, {
+      await fetch(`https://rbl-auction.onrender.com/api/captains/${captainId}/budget`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ budget, initialBudget }),

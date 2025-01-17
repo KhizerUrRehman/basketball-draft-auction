@@ -13,7 +13,7 @@ const PlayerPool = () => {
     const fetchPlayers = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/api/players?auctioned=false"
+          "https://rbl-auction.onrender.com/api/players?auctioned=false"
         );
         if (!response.ok) throw new Error("Failed to fetch players.");
         const data = await response.json();
