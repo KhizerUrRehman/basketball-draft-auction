@@ -190,10 +190,7 @@ const AuctionScreen = () => {
       {/* Auction in Progress */}
       {currentPlayer && (
         <div className="auction-in-progress">
-          <h1>Auction for: {currentPlayer.name}</h1>
-          <p>Position: {currentPlayer.position}</p>
-          <p>Starting Price: ${currentPlayer.startingPrice}</p>
-
+          
           <div className="bidding-section">
             {captains.map((captain) => (
               <div key={captain._id} className="captain-card">
@@ -219,6 +216,10 @@ const AuctionScreen = () => {
           </div>
 
           <div className="auction-controls">
+          <h1>Auction for: {currentPlayer.name}</h1>
+          <p>Position: {currentPlayer.position}</p>
+          <p>Starting Price: ${currentPlayer.startingPrice}</p>
+
             <p>
               Current Winning Bid: ${winningBid?.bid || "None"} by{" "}
               {winningBid?.captain || "No Captain"}
