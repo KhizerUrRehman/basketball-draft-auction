@@ -108,31 +108,37 @@ const AuctionScreen = () => {
     }
   
     try {
-      // Assign the player to the captain
       const captainId = captains.find((cap) => cap.name === winningBid.captain)._id;
+
+      // Assign the player to the captain
       await fetch(`https://rbl-auction.onrender.com/api/players/${currentPlayer._id}/assign`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ captainId, price: winningBid.bid }),
       });
-  
+
       // Deduct the bid amount from the captain's budget
       await fetch(`https://rbl-auction.onrender.com/api/captains/${captainId}/deduct-budget`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ amount: winningBid.bid }),
       });
-  
+
       const message = `Player ${currentPlayer.name} assigned to Captain ${winningBid.captain} for $${winningBid.bid}`;
       setLogs((prevLogs) => [...prevLogs, message]);
-  
+
+      // Refresh captains to reflect updated budgets
+      const captainResponse = await fetch("https://rbl-auction.onrender.com/api/captains");
+      const updatedCaptains = await captainResponse.json();
+      setCaptains(updatedCaptains);
+
       // Remove the player from the pool and reset the auction
       setPlayers((prevPlayers) =>
         prevPlayers.filter((player) => player._id !== currentPlayer._id)
       );
       setCurrentPlayer(null);
       setWinningBid(null);
-  
+
       // Notify other clients
       socket.emit("endAuction", {
         player: currentPlayer,
@@ -143,7 +149,6 @@ const AuctionScreen = () => {
       alert("Failed to finalize auction. Please try again.");
     }
   };
-  
 
   useEffect(() => {
     fetchAuctionData();
@@ -154,6 +159,7 @@ const AuctionScreen = () => {
       setBids(state.bids);
       setLogs(state.logs);
       setWinningBid(state.winningBid);
+      setCaptains(state.captains || []); // Ensure captains are updated if part of state
     });
 
     return () => {
@@ -163,7 +169,6 @@ const AuctionScreen = () => {
 
   return (
     <div className="auction-screen">
-      {/* Player Selection */}
       {!currentPlayer && (
         <div className="auction-player-selection">
           <h2>Select a Player to Start Auction</h2>
@@ -187,19 +192,13 @@ const AuctionScreen = () => {
         </div>
       )}
 
-      {/* Auction in Progress */}
       {currentPlayer && (
         <div className="auction-in-progress">
-          
           <div className="bidding-section">
             {captains.map((captain) => (
               <div key={captain._id} className="captain-card">
                 <h3>{captain.name}</h3>
                 <p>Budget: ${captain.budget}</p>
-                <p>
-                  Current Bid: $
-                  {bids.find((bid) => bid.captainId === captain._id)?.bid || 0}
-                </p>
                 <input
                   type="number"
                   min="0"
@@ -216,10 +215,9 @@ const AuctionScreen = () => {
           </div>
 
           <div className="auction-controls">
-          <h1>Auction for: {currentPlayer.name}</h1>
-          <p>Position: {currentPlayer.position}</p>
-          <p>Starting Price: ${currentPlayer.startingPrice}</p>
-
+            <h1>Auction for: {currentPlayer.name}</h1>
+            <p>Position: {currentPlayer.position}</p>
+            <p>Starting Price: ${currentPlayer.startingPrice}</p>
             <p>
               Current Winning Bid: ${winningBid?.bid || "None"} by{" "}
               {winningBid?.captain || "No Captain"}
@@ -229,7 +227,6 @@ const AuctionScreen = () => {
         </div>
       )}
 
-      {/* Logs */}
       <div className="auction-logs">
         <h3>Auction Logs</h3>
         <ul>
