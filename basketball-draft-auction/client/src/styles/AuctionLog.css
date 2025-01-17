@@ -1,0 +1,87 @@
+/* General Page Styling */
+.auction-log {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Heading Styling */
+  .auction-log h1 {
+    text-align: center;
+    color: #343a40;
+    margin-bottom: 20px;
+  }
+  
+  /* Current Auction Section */
+  .current-auction {
+    background-color: #ffffff;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .current-auction h2 {
+    font-size: 1.5em;
+    color: #007bff;
+    margin-bottom: 10px;
+  }
+  
+  .current-auction p {
+    font-size: 1em;
+    color: #6c757d;
+    margin: 5px 0;
+  }
+  
+  /* Auction Logs Section */
+  .auction-logs {
+    background-color: #ffffff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .auction-logs h2 {
+    font-size: 1.25em;
+    color: #343a40;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 5px;
+  }
+  
+  .auction-logs ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .auction-logs li {
+    background-color: #f1f3f5;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 4px;
+    font-size: 0.95em;
+    color: #495057;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 600px) {
+    .auction-log {
+      padding: 10px;
+    }
+  
+    .current-auction,
+    .auction-logs {
+      padding: 10px;
+    }
+  
+    .current-auction h2,
+    .auction-logs h2 {
+      font-size: 1.2em;
+    }
+  }
+  

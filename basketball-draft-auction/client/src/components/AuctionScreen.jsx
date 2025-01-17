@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { io } from "socket.io-client";
 import "../styles/AuctionScreen.css";
-import logo from "../assets/lob.jpg"; // Import the logo
+
+const socket = io("https://rbl-auction.onrender.com");
 
 const AuctionScreen = () => {
   const [players, setPlayers] = useState([]);
@@ -10,7 +12,9 @@ const AuctionScreen = () => {
   const [winningBid, setWinningBid] = useState(null);
   const [logs, setLogs] = useState([]);
   const [selectedPlayerId, setSelectedPlayerId] = useState("");
+  const [bidInputs, setBidInputs] = useState({}); // Track inputs separately
 
+  // Fetch players and captains
   const fetchAuctionData = async () => {
     try {
       const playerResponse = await fetch(
@@ -19,7 +23,9 @@ const AuctionScreen = () => {
       const playerData = await playerResponse.json();
       setPlayers(playerData);
 
-      const captainResponse = await fetch("https://rbl-auction.onrender.com/api/captains");
+      const captainResponse = await fetch(
+        "https://rbl-auction.onrender.com/api/captains"
+      );
       const captainData = await captainResponse.json();
       setCaptains(captainData);
     } catch (error) {
@@ -27,192 +33,209 @@ const AuctionScreen = () => {
     }
   };
 
-  const initializeAuction = async (playerId) => {
-    const selectedPlayer = players.find((player) => player._id === playerId);
-
+  // Restore auction state on page load
+  const restoreAuctionState = async () => {
     try {
-      const captainResponse = await fetch("https://rbl-auction.onrender.com/api/captains");
-      const updatedCaptains = await captainResponse.json();
-      setCaptains(updatedCaptains);
-
-      setCurrentPlayer(selectedPlayer);
-      setBids(
-        updatedCaptains.map((captain) => ({
-          captain: captain.name,
-          captainId: captain._id,
-          bid: 0,
-        }))
-      );
-      setLogs((prevLogs) => [
-        ...prevLogs,
-        `Auction started for ${selectedPlayer.name}`,
-      ]);
+      const response = await fetch("https://rbl-auction.onrender.com/api/auction-state");
+      const state = await response.json();
+      setCurrentPlayer(state.currentPlayer);
+      setBids(state.bids);
+      setLogs(state.logs);
+      setWinningBid(state.winningBid);
     } catch (error) {
-      console.error("Error initializing auction:", error);
-      alert("Failed to start auction. Please try again.");
+      console.error("Error restoring auction state:", error);
     }
   };
 
-  const placeBid = (captainId, amount) => {
+  // Initialize auction
+  const initializeAuction = (playerId) => {
+    const selectedPlayer = players.find((player) => player._id === playerId);
+    setCurrentPlayer(selectedPlayer);
+    setBids(
+      captains.map((captain) => ({
+        captain: captain.name,
+        captainId: captain._id,
+        bid: 0,
+      }))
+    );
+
+    const message = `Auction started for ${selectedPlayer.name}`;
+    setLogs((prevLogs) => [...prevLogs, message]);
+
+    // Notify other clients
+    socket.emit("startAuction", { player: selectedPlayer });
+  };
+
+  // Handle bid input change
+  const handleBidInputChange = (captainId, amount) => {
+    setBidInputs((prev) => ({
+      ...prev,
+      [captainId]: amount,
+    }));
+  };
+
+  // Handle bid submission
+  const submitBid = (captainId) => {
+    const amount = parseInt(bidInputs[captainId] || 0, 10);
+    if (isNaN(amount) || amount <= 0) {
+      alert("Please enter a valid bid amount.");
+      return;
+    }
+
+    const captainName = captains.find((cap) => cap._id === captainId).name;
+
     setBids((prevBids) =>
       prevBids.map((bid) =>
         bid.captainId === captainId ? { ...bid, bid: amount } : bid
       )
     );
+
+    const message = `Captain ${captainName} placed a bid of $${amount}`;
+    setLogs((prevLogs) => [...prevLogs, message]);
+
+    if (!winningBid || amount > winningBid.bid) {
+      setWinningBid({ captain: captainName, bid: amount });
+    }
+
+    socket.emit("placeBid", { captain: captainName, bid: amount });
   };
 
-  const submitBid = (captainId) => {
-    const captainName = captains.find((cap) => cap._id === captainId).name;
-    const amount = bids.find((bid) => bid.captainId === captainId).bid;
-    const logMessage = `Captain ${captainName} placed a bid of $${amount}`;
-    setLogs((prevLogs) => [...prevLogs, logMessage]);
-  };
-
+  // Finalize auction
   const finalizeAuction = async () => {
     if (!winningBid || !currentPlayer) {
       alert("No winning bid to finalize!");
       return;
     }
-
+  
     try {
-      await fetch(
-        `https://rbl-auction.onrender.com/api/players/${currentPlayer._id}/assign`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            captainId: winningBid.captainId,
-            price: winningBid.bid, // Include the price in the request
-          }),
-        }
+      // Assign the player to the captain
+      const captainId = captains.find((cap) => cap.name === winningBid.captain)._id;
+      await fetch(`https://rbl-auction.onrender.com/api/players/${currentPlayer._id}/assign`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ captainId, price: winningBid.bid }),
+      });
+  
+      // Deduct the bid amount from the captain's budget
+      await fetch(`https://rbl-auction.onrender.com/api/captains/${captainId}/deduct-budget`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount: winningBid.bid }),
+      });
+  
+      const message = `Player ${currentPlayer.name} assigned to Captain ${winningBid.captain} for $${winningBid.bid}`;
+      setLogs((prevLogs) => [...prevLogs, message]);
+  
+      // Remove the player from the pool and reset the auction
+      setPlayers((prevPlayers) =>
+        prevPlayers.filter((player) => player._id !== currentPlayer._id)
       );
-
-      await fetch(
-        `https://rbl-auction.onrender.com/api/captains/${winningBid.captainId}/deduct-budget`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ amount: winningBid.bid }),
-        }
-      );
-
-      setLogs((prevLogs) => [
-        ...prevLogs,
-        `Player ${currentPlayer.name} assigned to Captain ${winningBid.captain} for $${winningBid.bid}`,
-      ]);
-
-      setPlayers(players.filter((player) => player._id !== currentPlayer._id));
       setCurrentPlayer(null);
       setWinningBid(null);
+  
+      // Notify other clients
+      socket.emit("endAuction", {
+        player: currentPlayer,
+        winningBid,
+      });
     } catch (error) {
       console.error("Error finalizing auction:", error);
       alert("Failed to finalize auction. Please try again.");
     }
   };
+  
 
   useEffect(() => {
     fetchAuctionData();
+    restoreAuctionState();
+
+    socket.on("auctionState", (state) => {
+      setCurrentPlayer(state.currentPlayer);
+      setBids(state.bids);
+      setLogs(state.logs);
+      setWinningBid(state.winningBid);
+    });
+
+    return () => {
+      socket.off("auctionState");
+    };
   }, []);
 
-  useEffect(() => {
-    const maxBid = bids.reduce(
-      (max, bid) => (bid.bid > max.bid ? bid : max),
-      { bid: 0 }
-    );
-    setWinningBid(maxBid);
-  }, [bids]);
-
   return (
-    <div>   
+    <div className="auction-screen">
+      {/* Player Selection */}
+      {!currentPlayer && (
+        <div className="auction-player-selection">
+          <h2>Select a Player to Start Auction</h2>
+          <select
+            value={selectedPlayerId}
+            onChange={(e) => setSelectedPlayerId(e.target.value)}
+          >
+            <option value="">Select Player</option>
+            {players.map((player) => (
+              <option key={player._id} value={player._id}>
+                {player.name} - {player.position}
+              </option>
+            ))}
+          </select>
+          <button
+            onClick={() => initializeAuction(selectedPlayerId)}
+            disabled={!selectedPlayerId}
+          >
+            Start Auction
+          </button>
+        </div>
+      )}
 
-    
+      {/* Auction in Progress */}
+      {currentPlayer && (
+        <div className="auction-in-progress">
+          <h1>Auction for: {currentPlayer.name}</h1>
+          <p>Position: {currentPlayer.position}</p>
+          <p>Starting Price: ${currentPlayer.startingPrice}</p>
 
-            <div className="captains-grid">
-              {bids.map((bid) => (
-                <div key={bid.captainId} className="captain-card">
-                  <h3>{bid.captain}</h3>
-                  <p>
-                    Budget: $
-                    {captains.find((cap) => cap._id === bid.captainId)?.budget}
-                  </p>
-                  <input
-                    type="number"
-                    className="bid-input"
-                    min="0"
-                    max={
-                      captains.find((cap) => cap._id === bid.captainId)?.budget
-                    }
-                    value={bid.bid}
-                    onChange={(e) =>
-                      placeBid(bid.captainId, parseInt(e.target.value, 10) || 0)
-                    }
-                  />
-                  <button
-                    onClick={() => submitBid(bid.captainId)}
-                    className="bid-button"
-                  >
-                    Place Bid
-                  </button>
-                </div>
-              ))}
-            </div>
-
-        <div className="auction-container">
-        {currentPlayer ? (
-          <>
-            <div className="auction-player">
-              <button onClick={finalizeAuction} className="finalize-button">
-                Finalize Auction
-              </button>
-              <h1 className="player-name">{currentPlayer.name}</h1>
-              <p className="player-details">
-                Position: {currentPlayer.position} | Starting Price: $
-                {currentPlayer.startingPrice}
-              </p>
-            </div>
-
-            <div className="auction-controls">
-               
-              <p>
-                Current Winning Bid: ${winningBid?.bid || "None"} by{" "}
-                {winningBid?.captain || "No Captain"}
-              </p>
-             
-            </div>
-          </>
-        ) : (
-          <div className="auction-player-selection">
-            <h2>Select a Player to Auction</h2>
-            <select
-              value={selectedPlayerId}
-              onChange={(e) => setSelectedPlayerId(e.target.value)}
-            >
-              <option value="">Select Player</option>
-              {players.map((player) => (
-                <option key={player._id} value={player._id}>
-                  {player.name} - {player.position}
-                </option>
-              ))}
-            </select>
-            <button
-              onClick={() => initializeAuction(selectedPlayerId)}
-              className="start-auction-button"
-              disabled={!selectedPlayerId}
-            >
-              Start Auction
-            </button>
+          <div className="bidding-section">
+            {captains.map((captain) => (
+              <div key={captain._id} className="captain-card">
+                <h3>{captain.name}</h3>
+                <p>Budget: ${captain.budget}</p>
+                <p>
+                  Current Bid: $
+                  {bids.find((bid) => bid.captainId === captain._id)?.bid || 0}
+                </p>
+                <input
+                  type="number"
+                  min="0"
+                  value={bidInputs[captain._id] || ""}
+                  onChange={(e) =>
+                    handleBidInputChange(captain._id, e.target.value)
+                  }
+                />
+                <button onClick={() => submitBid(captain._id)}>
+                  Place Bid
+                </button>
+              </div>
+            ))}
           </div>
-        )}
 
-<div className="auction-logs">
-  <h3>Auction Logs</h3>
-  
-    {[...logs].reverse().map((log, index) => (
-      <li key={index}>{log}</li>
-    ))}
-  
-</div>
+          <div className="auction-controls">
+            <p>
+              Current Winning Bid: ${winningBid?.bid || "None"} by{" "}
+              {winningBid?.captain || "No Captain"}
+            </p>
+            <button onClick={finalizeAuction}>Finalize Auction</button>
+          </div>
+        </div>
+      )}
 
+      {/* Logs */}
+      <div className="auction-logs">
+        <h3>Auction Logs</h3>
+        <ul>
+          {[...logs].reverse().map((log, index) => (
+            <li key={index}>{log}</li>
+          ))}
+        </ul>
       </div>
     </div>
   );
