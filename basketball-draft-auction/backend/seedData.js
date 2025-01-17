@@ -31,11 +31,11 @@ const captains = [
   { name: "Usman Khalid", team: "Knights", budget: 1000, initialBudget: 1000, players: [] },
   { name: "Ammar", team: "Warriors", budget: 1100, initialBudget: 1100, players: [] },
   { name: "Zain", team: "Titans", budget: 1000, initialBudget: 1000, players: [] },
-  { name: "Shehzar", team: "Gladiators", budget: 1200, initialBudget: 1200, players: [] },
-  { name: "Ramish", team: "Falcons", budget: 1100, initialBudget: 1100, players: [] },
+  { name: "Shehzar", team: "Gladiators", budget: 1150, initialBudget: 1150, players: [] },
+  { name: "Ramish", team: "Falcons", budget: 1050, initialBudget: 1050, players: [] },
   { name: "Ans", team: "Avengers", budget: 1000, initialBudget: 1000, players: [] },
-  { name: "Mohsin", team: "Raptors", budget: 1000, initialBudget: 1000, players: [] },
-  { name: "TBD", team: "Hawks", budget: 1100, initialBudget: 1100, players: [] },
+  { name: "Mohsin", team: "Raptors", budget: 950, initialBudget: 950, players: [] },
+  { name: "Aaraiz", team: "Hawks", budget: 1000, initialBudget: 1000, players: [] },
 ];
 
     const savedCaptains = await Captain.insertMany(captains);
