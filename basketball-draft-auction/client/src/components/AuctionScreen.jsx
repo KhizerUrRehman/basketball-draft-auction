@@ -106,31 +106,41 @@ const AuctionScreen = () => {
       alert("No winning bid to finalize!");
       return;
     }
-  
+
     try {
       const captainId = captains.find((cap) => cap.name === winningBid.captain)._id;
 
       // Assign the player to the captain
-      await fetch(`https://rbl-auction.onrender.com/api/players/${currentPlayer._id}/assign`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ captainId, price: winningBid.bid }),
-      });
+      await fetch(
+        `https://rbl-auction.onrender.com/api/players/${currentPlayer._id}/assign`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ captainId, price: winningBid.bid }),
+        }
+      );
 
       // Deduct the bid amount from the captain's budget
-      await fetch(`https://rbl-auction.onrender.com/api/captains/${captainId}/deduct-budget`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: winningBid.bid }),
-      });
+      await fetch(
+        `https://rbl-auction.onrender.com/api/captains/${captainId}/deduct-budget`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ amount: winningBid.bid }),
+        }
+      );
 
       const message = `Player ${currentPlayer.name} assigned to Captain ${winningBid.captain} for $${winningBid.bid}`;
       setLogs((prevLogs) => [...prevLogs, message]);
 
-      // Refresh captains to reflect updated budgets
-      const captainResponse = await fetch("https://rbl-auction.onrender.com/api/captains");
-      const updatedCaptains = await captainResponse.json();
-      setCaptains(updatedCaptains);
+      // Update the captain's budget locally
+      setCaptains((prevCaptains) =>
+        prevCaptains.map((captain) =>
+          captain._id === captainId
+            ? { ...captain, budget: captain.budget - winningBid.bid }
+            : captain
+        )
+      );
 
       // Remove the player from the pool and reset the auction
       setPlayers((prevPlayers) =>
@@ -159,7 +169,6 @@ const AuctionScreen = () => {
       setBids(state.bids);
       setLogs(state.logs);
       setWinningBid(state.winningBid);
-      setCaptains(state.captains || []); // Ensure captains are updated if part of state
     });
 
     return () => {
@@ -219,7 +228,7 @@ const AuctionScreen = () => {
             <p>Position: {currentPlayer.position}</p>
             <p>Starting Price: ${currentPlayer.startingPrice}</p>
             <p>
-              Current Winning Bid: ${winningBid?.bid || "None"} by{" "}
+              Current Winning Bid: ${winningBid?.bid || "None"} by {" "}
               {winningBid?.captain || "No Captain"}
             </p>
             <button onClick={finalizeAuction}>Finalize Auction</button>
