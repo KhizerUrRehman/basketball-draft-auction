@@ -8,6 +8,7 @@ const PlayerPool = () => {
   const [error, setError] = useState(null);
   const [filterPosition, setFilterPosition] = useState("");
   const [sortOrder, setSortOrder] = useState("ascending");
+  const [searchQuery, setSearchQuery] = useState(""); // New search query state
 
   useEffect(() => {
     const fetchPlayers = async () => {
@@ -32,21 +33,42 @@ const PlayerPool = () => {
   // Filter players by position
   const handleFilterPosition = (position) => {
     setFilterPosition(position);
-    const filtered = position
-      ? players.filter((player) => player.position === position)
-      : players;
-    setFilteredPlayers(filtered);
+    applyFilters(position, sortOrder, searchQuery);
   };
 
   // Sort players by price
   const handleSortOrder = (order) => {
     setSortOrder(order);
-    const sorted = [...filteredPlayers].sort((a, b) => {
-      return order === "ascending"
-        ? a.startingPrice - b.startingPrice
-        : b.startingPrice - a.startingPrice;
-    });
-    setFilteredPlayers(sorted);
+    applyFilters(filterPosition, order, searchQuery);
+  };
+
+  // Filter players by search query
+  const handleSearchQuery = (query) => {
+    setSearchQuery(query);
+    applyFilters(filterPosition, sortOrder, query);
+  };
+
+  // Apply all filters: position, sort, and search
+  const applyFilters = (position, order, query) => {
+    let filtered = players;
+
+    if (position) {
+      filtered = filtered.filter((player) => player.position === position);
+    }
+
+    if (query) {
+      filtered = filtered.filter((player) =>
+        player.name.toLowerCase().includes(query.toLowerCase())
+      );
+    }
+
+    if (order === "ascending") {
+      filtered = filtered.sort((a, b) => a.startingPrice - b.startingPrice);
+    } else {
+      filtered = filtered.sort((a, b) => b.startingPrice - a.startingPrice);
+    }
+
+    setFilteredPlayers(filtered);
   };
 
   return (
@@ -54,6 +76,15 @@ const PlayerPool = () => {
       <h1>Player Pool</h1>
 
       <div className="filters">
+        {/* Search Filter */}
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={(e) => handleSearchQuery(e.target.value)}
+          placeholder="Search by name"
+          className="search-input"
+        />
+
         {/* Position Filter */}
         <select
           value={filterPosition}
