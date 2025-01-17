@@ -125,16 +125,7 @@ const AuctionScreen = () => {
   return (
     <div>   
 
-      <div className="auction-container">
-        {currentPlayer ? (
-          <>
-            <div className="auction-player">
-              <h1 className="player-name">{currentPlayer.name}</h1>
-              <p className="player-details">
-                Position: {currentPlayer.position} | Starting Price: $
-                {currentPlayer.startingPrice}
-              </p>
-            </div>
+    
 
             <div className="captains-grid">
               {bids.map((bid) => (
@@ -166,14 +157,26 @@ const AuctionScreen = () => {
               ))}
             </div>
 
+        <div className="auction-container">
+        {currentPlayer ? (
+          <>
+            <div className="auction-player">
+              <h1 className="player-name">{currentPlayer.name}</h1>
+              <p className="player-details">
+                Position: {currentPlayer.position} | Starting Price: $
+                {currentPlayer.startingPrice}
+              </p>
+            </div>
+
             <div className="auction-controls">
+               <button onClick={finalizeAuction} className="finalize-button">
+                Finalize Auction
+              </button>
               <p>
                 Current Winning Bid: ${winningBid?.bid || "None"} by{" "}
                 {winningBid?.captain || "No Captain"}
               </p>
-              <button onClick={finalizeAuction} className="finalize-button">
-                Finalize Auction
-              </button>
+             
             </div>
           </>
         ) : (
