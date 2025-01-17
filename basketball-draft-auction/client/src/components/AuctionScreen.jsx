@@ -204,13 +204,15 @@ const AuctionScreen = () => {
           </div>
         )}
 
-        <div className="auction-logs">
-          <h3>Auction Logs</h3>
-          
-            {logs.map((log, index) => (
-              <li key={index}>{log}</li>
-            ))}
-        </div>
+<div className="auction-logs">
+  <h3>Auction Logs</h3>
+  <ul>
+    {[...logs].reverse().map((log, index) => (
+      <li key={index}>{log}</li>
+    ))}
+  </ul>
+</div>
+
       </div>
     </div>
   );
