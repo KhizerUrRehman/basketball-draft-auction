@@ -70,10 +70,16 @@ body {
 
 .captains-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr); /* 5 columns */
-  gap: 20px;
-  margin-bottom: 30px;
+  grid-template-columns: repeat(3, 1fr); /* 5 equal columns */
+  gap: 20px; /* Space between grid items */
+  margin: 0 auto; /* Center the entire grid horizontally */
+  margin-top: 10px;
+  justify-content: center; /* Center the grid content */
+  align-items: center; /* Center the grid vertically (optional) */
+  width: max-content; /* Ensure the grid width adjusts to its content */
 }
+
+
 
 .captain-card {
   padding: 15px;
