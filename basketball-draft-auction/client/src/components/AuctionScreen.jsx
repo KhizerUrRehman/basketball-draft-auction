@@ -161,6 +161,9 @@ const AuctionScreen = () => {
         {currentPlayer ? (
           <>
             <div className="auction-player">
+              <button onClick={finalizeAuction} className="finalize-button">
+                Finalize Auction
+              </button>
               <h1 className="player-name">{currentPlayer.name}</h1>
               <p className="player-details">
                 Position: {currentPlayer.position} | Starting Price: $
@@ -169,9 +172,7 @@ const AuctionScreen = () => {
             </div>
 
             <div className="auction-controls">
-               <button onClick={finalizeAuction} className="finalize-button">
-                Finalize Auction
-              </button>
+               
               <p>
                 Current Winning Bid: ${winningBid?.bid || "None"} by{" "}
                 {winningBid?.captain || "No Captain"}
