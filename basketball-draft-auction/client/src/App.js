@@ -50,9 +50,9 @@ function App() {
       <div className="App">
         <nav className="navbar">  
   <ul className="nav-links">
-    <li><a href="/home">Home</a></li>
-    <li><a href="/captains">Captains</a></li>
-    <li><a href="/player-pool">Player Pool</a></li>
+    <li><Link to="/home">Home</a></li>
+    <li><Link to="/captains">Captains</a></li>
+    <li><Link to="/player-pool">Player Pool</a></li>
   </ul>
   <h1 className="navbar-title">RBL AUCTION</h1>
   <img src={logo} alt="Company Logo" className="logo" />
