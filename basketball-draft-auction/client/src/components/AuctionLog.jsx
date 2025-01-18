@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { io } from "socket.io-client";
 import "../styles/AuctionLog.css";
-import ans from "../assets/ans.png";
-
+//import ans from "../assets/ans.png";
+//<img src={ans} alt="ans" className="ans" />
 const socket = io("https://rbl-auction.onrender.com");
 
 const AuctionLog = () => {
@@ -34,7 +34,6 @@ const AuctionLog = () => {
         ) : (
           <p>No active auction</p>
         )}
-        <img src={ans} alt="ans" className="ans" />
       </div>
             {[...logs].reverse().map((log, index) => (
               <li key={index}>{log}</li>
