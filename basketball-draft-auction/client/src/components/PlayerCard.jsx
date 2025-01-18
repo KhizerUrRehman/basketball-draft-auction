@@ -7,7 +7,7 @@ const PlayerCard = ({ player, onSelect }) => {
     <div className="player-card" onClick={() => onSelect(player)}>
       <h2>{player.name}</h2>
       <p>Position: {player.position}</p>
-      <p>Contact: {player.contact}</p>
+      <p>Height: {player.contact}</p>
     </div>
   );
 };

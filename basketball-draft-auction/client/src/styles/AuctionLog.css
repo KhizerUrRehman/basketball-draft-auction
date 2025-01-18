@@ -85,8 +85,16 @@
     }
   }
   
-  .ans {
-      height: auto;
-      max-width: 100%;
-    
+  .auction-container {
+    padding: 20px;
+  }
+  
+  .auction-player {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  .auction-logs {
+    text-align: middle;
+    justify-items: middle;
+    margin-bottom: 30px;
   }

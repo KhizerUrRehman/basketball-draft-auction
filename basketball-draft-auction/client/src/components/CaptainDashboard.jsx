@@ -16,7 +16,7 @@ const CaptainDashboard = ({ team, budget }) => {
             </div>
           ))
         ) : (
-          <p className="no-players">No players in your team yet.</p>
+          <p className="no-players">No players in this team yet.</p>
         )}
       </div>
     </div>

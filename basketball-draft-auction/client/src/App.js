@@ -8,8 +8,8 @@ import Captains from './pages/Captains';
 import PlayerPool from './pages/PlayerPool';
 import LogPage from "./components/LogPage"; // New log page
 import AuctionLog from "./components/AuctionLog";
-import logo from "./assets/lob.jpg"; // Import the logo
-
+//import logo from "./assets/lob.jpg"; // Import the logo
+//<img src={logo} alt="Company Logo" className="logo" />
 function App() {
   return ( 
     <Router>
@@ -22,7 +22,6 @@ function App() {
     <li><a href="/auction-log">Auction Log</a></li>
   </ul>
   <h1 className="navbar-title">RBL AUCTION</h1>
-  <img src={logo} alt="Company Logo" className="logo" />
 </nav> 
         <Routes>
           <Route path="/" element={<Home />} />
