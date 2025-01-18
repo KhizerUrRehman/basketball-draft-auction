@@ -120,7 +120,7 @@ const PlayerPool = () => {
             <div key={player._id} className="player-card">
               <h2>{player.name}</h2>
               <p>Position: {player.position}</p>
-              <p>Contact: {player.contact}</p>
+              <p>Height: {player.contact}</p>
               <p>Starting Price: ${player.startingPrice}</p>
             </div>
           ))}

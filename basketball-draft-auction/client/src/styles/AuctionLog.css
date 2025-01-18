@@ -101,3 +101,7 @@
     justify-items: middle;
     margin-bottom: 30px;
   }
+  .logo {
+    align-self: center;
+    margin-top: 10px;
+  }
