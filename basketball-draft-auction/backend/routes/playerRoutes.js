@@ -52,8 +52,17 @@ router.post("/:id/assign", async (req, res) => {
 
 // Add a new player
 router.post("/", async (req, res) => {
+  const { name, position, priorTeam, availability, age, contact, startingPrice=50 } = req.body;
+  const player = new Player({
+    name,
+    position,
+    priorTeam,
+    availability,
+    age,
+    contact,
+    startingPrice
+  });
   try {
-    const player = new Player(req.body);
     await player.save();
     res.status(201).json({ message: "Player added successfully", player });
   } catch (error) {
@@ -77,20 +86,14 @@ router.delete("/:id", async (req, res) => {
 
 // Update a player's price
 router.put("/:id", async (req, res) => {
-  const { id } = req.params;
-  const { startingPrice } = req.body;
-
-  try {
-    const player = await Player.findByIdAndUpdate(
-      id,
-      { startingPrice },
-      { new: true }
-    );
-    if (!player) return res.status(404).json({ message: "Player not found" });
-    res.status(200).json({ message: "Price updated successfully", player });
-  } catch (error) {
-    res.status(500).json({ message: "Error updating price", error });
-  }
+  const { name, position, priorTeam, availability, age } = req.body;
+  const updatedPlayer = await Player.findByIdAndUpdate(
+    req.params.id,
+    { name, position, priorTeam, availability, age },
+    { new: true }
+  );
+  if (!updatedPlayer) return res.status(404).json({ message: "Player not found" });
+  res.status(200).json({ message: "Player updated successfully", updatedPlayer });
 });
 
 module.exports = router;

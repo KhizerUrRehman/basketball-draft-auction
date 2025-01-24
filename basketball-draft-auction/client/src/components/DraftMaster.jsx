@@ -11,6 +11,7 @@ const DraftMaster = () => {
   const [editingInitialBudgets, setEditingInitialBudgets] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOrder, setSortOrder] = useState("ascending");
+  const [currentPlayer, setCurrentPlayer] = useState(null);
 
   const fetchData = async () => {
     try {
@@ -135,7 +136,16 @@ const DraftMaster = () => {
   }, []);
 
   return (
-    <div className="draftmaster-container">
+    <div className="draft-master">
+      <div className="current-player">
+        {currentPlayer && (
+          <div className="player-info">
+            <p>Age: {currentPlayer.age}</p>
+            <p>Prior Team: {currentPlayer.priorTeam}</p>
+            <p>Status: {currentPlayer.availability}</p>
+          </div>
+        )}
+      </div>
       <h1>Draft Master</h1>
 
       <div className="captain-management">

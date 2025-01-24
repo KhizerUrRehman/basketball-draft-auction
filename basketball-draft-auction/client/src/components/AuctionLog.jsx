@@ -37,11 +37,16 @@ const AuctionLog = () => {
           <p>No active auction</p>
         )}
       </div>
-            {[...logs].reverse().map((log, index) => (
-              <li key={index}>{log}</li>
-            ))}
+      {logs.map(entry => (
+        <div key={entry._id} className="auction-entry">
+          <div className="player-details">
+            <span>Age: {entry.player.age}</span>
+            <span>Prior Team: {entry.player.priorTeam}</span>
+            <span>Status: {entry.player.availability}</span>
+          </div>
+        </div>
+      ))}
     </div>
-    
   );
 };
 
