@@ -163,19 +163,7 @@ const DraftMaster = () => {
 
   return (
     <div className="draft-master">
-      <div className="current-player">
-        {currentPlayer ? (
-          <div className="player-info">
-            <h2>{currentPlayer.name}</h2>
-            <p>Position: {currentPlayer.position}</p>
-            <p>Age: {currentPlayer.age}</p>
-            <p>Status: {currentPlayer.availability}</p>
-            <p>Prior Team: {currentPlayer.priorTeam}</p>
-          </div>
-        ) : (
-          <p>No active auction</p>
-        )}
-      </div>
+      
       <h1>Draft Master</h1>
 
       <div className="captain-management">
