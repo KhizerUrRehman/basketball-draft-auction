@@ -86,14 +86,22 @@ router.delete("/:id", async (req, res) => {
 
 // Update a player's price
 router.put("/:id", async (req, res) => {
-  const { name, position, priorTeam, availability, age } = req.body;
-  const updatedPlayer = await Player.findByIdAndUpdate(
-    req.params.id,
-    { name, position, priorTeam, availability, age },
-    { new: true }
-  );
-  if (!updatedPlayer) return res.status(404).json({ message: "Player not found" });
-  res.status(200).json({ message: "Player updated successfully", updatedPlayer });
+  const { name, position, priorTeam, availability, age, startingPrice } = req.body; // Include `startingPrice`
+  try {
+    const updatedPlayer = await Player.findByIdAndUpdate(
+      req.params.id,
+      { name, position, priorTeam, availability, age, startingPrice }, // Update `startingPrice`
+      { new: true }
+    );
+    if (!updatedPlayer) {
+      return res.status(404).json({ message: "Player not found" });
+    }
+    res.status(200).json({ message: "Player updated successfully", updatedPlayer });
+  } catch (error) {
+    console.error("Error updating player:", error);
+    res.status(500).json({ message: "Error updating player", error });
+  }
 });
+
 
 module.exports = router;
