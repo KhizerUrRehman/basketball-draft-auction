@@ -86,11 +86,17 @@ const DraftMaster = () => {
       await fetch(`https://rbl-auction.onrender.com/api/players/${playerId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ startingPrice: newPrice }),
+        body: JSON.stringify({ startingPrice: parseInt(newPrice) }),
       });
       fetchData(); // Refresh data after updating price
+      setEditingPrices(prev => {
+        const newPrices = { ...prev };
+        delete newPrices[playerId];
+        return newPrices;
+      });
     } catch (error) {
       console.error("Error updating price:", error);
+      alert("Failed to update price. Please try again.");
     }
   };
 
@@ -138,12 +144,16 @@ const DraftMaster = () => {
   return (
     <div className="draft-master">
       <div className="current-player">
-        {currentPlayer && (
+        {currentPlayer ? (
           <div className="player-info">
+            <h2>{currentPlayer.name}</h2>
+            <p>Position: {currentPlayer.position}</p>
             <p>Age: {currentPlayer.age}</p>
-            <p>Prior Team: {currentPlayer.priorTeam}</p>
             <p>Status: {currentPlayer.availability}</p>
+            <p>Prior Team: {currentPlayer.priorTeam}</p>
           </div>
+        ) : (
+          <p>No active auction</p>
         )}
       </div>
       <h1>Draft Master</h1>
