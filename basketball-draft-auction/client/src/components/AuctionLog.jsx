@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import { io } from "socket.io-client";
 import "../styles/AuctionLog.css";
 import logo from "../assets/lob.jpg";
-//import ans from "../assets/ans.png";
-//<img src={ans} alt="ans" className="ans" />
+
 const socket = io("https://rbl-auction.onrender.com");
 
 const AuctionLog = () => {
@@ -13,10 +12,15 @@ const AuctionLog = () => {
 
   useEffect(() => {
     socket.on("auctionState", (state) => {
-      setLogs(state.logs);
+      console.log("Received auctionState in AuctionLog:", state);
+      setLogs(state.logs || []);
       setCurrentPlayer(state.currentPlayer);
       setWinningBid(state.winningBid);
     });
+
+    return () => {
+      socket.off("auctionState");
+    };
   }, []);
 
   return (
@@ -32,7 +36,7 @@ const AuctionLog = () => {
             <p>Prior Team: {currentPlayer.priorTeam}</p>
             <p>Status: {currentPlayer.availability}</p>
             <p>
-              Current Winning Bid: ${winningBid?.bid || "None"} by{" "}
+              Current Winning Bid: ${winningBid?.bid || "None"} by {" "}
               {winningBid?.captain || "No Captain"}
             </p>
           </div>
@@ -40,19 +44,19 @@ const AuctionLog = () => {
           <p>No active auction</p>
         )}
       </div>
-      {logs.map(entry => (
-        <div key={entry._id} className="auction-entry">
-          <div className="player-details">
-            {entry.player && (
-              <>
-                <span>Age: {entry.player.age}</span>
-                <span>Prior Team: {entry.player.priorTeam}</span>
-                <span>Status: {entry.player.availability}</span>
-              </>
-            )}
-          </div>
-        </div>
-      ))}
+
+      <div className="auction-logs">
+        <h3>Auction Logs</h3>
+        {logs.length > 0 ? (
+          <ul>
+            {[...logs].reverse().map((log, index) => (
+              <li key={index}>{log}</li>
+            ))}
+          </ul>
+        ) : (
+          <p>No logs available</p>
+        )}
+      </div>
     </div>
   );
 };
