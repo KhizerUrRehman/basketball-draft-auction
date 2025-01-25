@@ -46,13 +46,12 @@ const AuctionLog = () => {
       </div>
 
       <div className="auction-logs">
-        <h3>Auction Logs</h3>
         {logs.length > 0 ? (
-          <ul>
+          <div>
             {[...logs].reverse().map((log, index) => (
-              <li key={index}>{log}</li>
+              <p key={index}>{log}</p>
             ))}
-          </ul>
+          </div>
         ) : (
           <p>No logs available</p>
         )}
