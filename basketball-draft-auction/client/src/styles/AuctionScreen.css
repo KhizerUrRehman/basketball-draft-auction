@@ -113,4 +113,94 @@ body {
   gap: 20px;
 }
 
+.start-auction-section {
+  margin: 20px;
+  padding: 20px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.player-search {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.player-search-input {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border-color 0.2s;
+}
+
+.player-search-input:focus {
+  outline: none;
+  border-color: #0056b3;
+}
+
+.player-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 1000;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  margin-top: 4px;
+}
+
+.player-option {
+  padding: 12px 16px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+}
+
+.player-option:last-child {
+  border-bottom: none;
+}
+
+.player-option:hover {
+  background-color: #f8f9ff;
+}
+
+.player-name {
+  font-weight: bold;
+  color: #333;
+}
+
+.player-details {
+  color: #666;
+  font-size: 0.9em;
+}
+
+/* Scrollbar styling */
+.player-dropdown::-webkit-scrollbar {
+  width: 8px;
+}
+
+.player-dropdown::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 8px;
+}
+
+.player-dropdown::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 8px;
+}
+
+.player-dropdown::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
 

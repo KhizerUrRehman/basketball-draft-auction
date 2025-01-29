@@ -13,6 +13,9 @@ const AuctionScreen = () => {
   const [logs, setLogs] = useState([]);
   const [selectedPlayerId, setSelectedPlayerId] = useState("");
   const [bidInputs, setBidInputs] = useState({}); // Track inputs separately
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [availablePlayers, setAvailablePlayers] = useState([]);
 
   // Fetch players and captains
   const fetchAuctionData = async () => {
@@ -176,8 +179,59 @@ const AuctionScreen = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const fetchAvailablePlayers = async () => {
+      try {
+        const response = await fetch('https://rbl-auction.onrender.com/api/players?auctioned=false');
+        const data = await response.json();
+        setAvailablePlayers(data);
+      } catch (error) {
+        console.error('Error fetching available players:', error);
+      }
+    };
+    fetchAvailablePlayers();
+  }, []);
+
+  const filteredPlayers = availablePlayers.filter(player =>
+    player.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="auction-screen">
+      <div className="start-auction-section">
+        <h2>Start New Auction</h2>
+        <div className="player-search">
+          <input
+            type="text"
+            placeholder="Search for a player..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onFocus={() => setIsDropdownOpen(true)}
+            className="player-search-input"
+          />
+          {isDropdownOpen && (
+            <div className="player-dropdown">
+              {filteredPlayers.map((player) => (
+                <div
+                  key={player._id}
+                  className="player-option"
+                  onClick={() => {
+                    initializeAuction(player._id);
+                    setSearchQuery('');
+                    setIsDropdownOpen(false);
+                  }}
+                >
+                  <span className="player-name">{player.name}</span>
+                  <span className="player-details">
+                    {player.position} | Age: {player.age} | {player.priorTeam}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
       {!currentPlayer && (
         <div className="auction-player-selection">
           <h2>Select a Player to Start Auction</h2>
