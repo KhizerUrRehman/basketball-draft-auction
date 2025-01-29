@@ -14,6 +14,14 @@ const DraftMaster = () => {
   const [currentPlayer, setCurrentPlayer] = useState(null);
   const [editingCaptainNames, setEditingCaptainNames] = useState({});
   const [editingTeamNames, setEditingTeamNames] = useState({});
+  const [newPlayer, setNewPlayer] = useState({
+    name: '',
+    position: '',
+    age: '',
+    priorTeam: '',
+    availability: 'Available',
+    startingPrice: ''
+  });
 
   const fetchData = async () => {
     console.log("Fetching data...");
@@ -199,6 +207,46 @@ const DraftMaster = () => {
     }
   };
 
+  const addNewPlayer = async (e) => {
+    e.preventDefault();
+    
+    if (!newPlayer.name || !newPlayer.position || !newPlayer.age || !newPlayer.startingPrice) {
+      alert("Please fill in all required fields");
+      return;
+    }
+
+    try {
+      const response = await fetch('https://rbl-auction.onrender.com/api/players', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...newPlayer,
+          age: parseInt(newPlayer.age),
+          startingPrice: parseInt(newPlayer.startingPrice),
+          auctioned: false
+        })
+      });
+
+      if (response.ok) {
+        fetchData(); // Refresh the player list
+        // Reset form
+        setNewPlayer({
+          name: '',
+          position: '',
+          age: '',
+          priorTeam: '',
+          availability: 'Available',
+          startingPrice: ''
+        });
+      } else {
+        alert('Failed to add player');
+      }
+    } catch (error) {
+      console.error('Error adding player:', error);
+      alert('Error adding player');
+    }
+  };
+
   useEffect(() => {
     console.log("Component mounted. Fetching initial data...");
     fetchData();
@@ -206,8 +254,53 @@ const DraftMaster = () => {
 
   return (
     <div className="draft-master">
-      
       <h1>Draft Master</h1>
+      
+      <div className="add-player-form">
+        <h2>Add New Player</h2>
+        <form onSubmit={addNewPlayer}>
+          <div className="form-group">
+            <input
+              type="text"
+              placeholder="Player Name *"
+              value={newPlayer.name}
+              onChange={(e) => setNewPlayer({...newPlayer, name: e.target.value})}
+              required
+            />
+            <select
+              value={newPlayer.position}
+              onChange={(e) => setNewPlayer({...newPlayer, position: e.target.value})}
+              required
+            >
+              <option value="">Select Position *</option>
+              <option value="Guard">Guard</option>
+              <option value="Forward">Forward</option>
+              <option value="Center">Center</option>
+            </select>
+            <input
+              type="number"
+              placeholder="Age *"
+              value={newPlayer.age}
+              onChange={(e) => setNewPlayer({...newPlayer, age: e.target.value})}
+              required
+            />
+            <input
+              type="text"
+              placeholder="Prior Team"
+              value={newPlayer.priorTeam}
+              onChange={(e) => setNewPlayer({...newPlayer, priorTeam: e.target.value})}
+            />
+            <input
+              type="number"
+              placeholder="Starting Price *"
+              value={newPlayer.startingPrice}
+              onChange={(e) => setNewPlayer({...newPlayer, startingPrice: e.target.value})}
+              required
+            />
+          </div>
+          <button type="submit" className="add-player-button">Add Player</button>
+        </form>
+      </div>
 
       <div className="captain-management">
         <h2>Manage Captains</h2>
