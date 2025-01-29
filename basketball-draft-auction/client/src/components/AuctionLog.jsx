@@ -34,7 +34,7 @@ const AuctionLog = () => {
             <p>Position: {currentPlayer.position}</p>
             <p>Age: {currentPlayer.age}</p>
             <p>Prior Team: {currentPlayer.priorTeam}</p>
-            <p>Status: {currentPlayer.availability}</p>
+            <p>Availability: {currentPlayer.availability}</p>
             <p>
               Current Winning Bid: ${winningBid?.bid || "None"} by {" "}
               {winningBid?.captain || "No Captain"}
