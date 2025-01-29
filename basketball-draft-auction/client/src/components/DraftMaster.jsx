@@ -22,6 +22,8 @@ const DraftMaster = () => {
     availability: 'Available',
     startingPrice: ''
   });
+  const [captainSearchQuery, setCaptainSearchQuery] = useState('');
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const fetchData = async () => {
     console.log("Fetching data...");
@@ -247,6 +249,10 @@ const DraftMaster = () => {
     }
   };
 
+  const filteredCaptains = captains.filter(captain => 
+    captain.name.toLowerCase().includes(captainSearchQuery.toLowerCase())
+  );
+
   useEffect(() => {
     console.log("Component mounted. Fetching initial data...");
     fetchData();
@@ -403,24 +409,36 @@ const DraftMaster = () => {
                 </button>
               </div>
               <div className="assign-controls">
-                <select
-                  value={playerAssignments[player._id] || ""}
-                  onChange={(e) =>
-                    handleSelectCaptain(player._id, e.target.value)
-                  }
-                >
-                  <option value="">Assign to Captain</option>
-                  {captains.map((captain) => (
-                    <option key={captain._id} value={captain._id}>
-                      {captain.name}
-                    </option>
-                  ))}
-                </select>
+                <div className="custom-select">
+                  <input
+                    type="text"
+                    placeholder="Search captain..."
+                    value={captainSearchQuery}
+                    onChange={(e) => setCaptainSearchQuery(e.target.value)}
+                    onFocus={() => setIsDropdownOpen(true)}
+                    className="captain-search"
+                  />
+                  {isDropdownOpen && (
+                    <div className="captain-dropdown">
+                      {filteredCaptains.map((captain) => (
+                        <div
+                          key={captain._id}
+                          className="captain-option"
+                          onClick={() => {
+                            handleSelectCaptain(player._id, captain._id);
+                            setCaptainSearchQuery(captain.name);
+                            setIsDropdownOpen(false);
+                          }}
+                        >
+                          {captain.name} - {captain.team}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
                 <button
                   className="assign-button"
-                  onClick={() =>
-                    assignPlayer(player._id, playerAssignments[player._id])
-                  }
+                  onClick={() => assignPlayer(player._id, playerAssignments[player._id])}
                 >
                   Assign
                 </button>
