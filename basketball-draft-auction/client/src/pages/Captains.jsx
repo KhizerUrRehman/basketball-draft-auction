@@ -40,9 +40,8 @@ const Captains = () => {
               (total, player) => total + (player.price || 0),
               0
             );
-            //const remainingBudget = captain.initialBudget - teamCost;
-            const remainingBudget = captain.budget;
-            
+            const remainingBudget = captain.initialBudget - teamCost;
+
             return (
               <div key={captain._id} className="captain-card">
                 <h2>
