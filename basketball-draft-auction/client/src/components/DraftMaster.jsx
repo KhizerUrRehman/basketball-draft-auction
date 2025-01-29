@@ -12,6 +12,8 @@ const DraftMaster = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOrder, setSortOrder] = useState("ascending");
   const [currentPlayer, setCurrentPlayer] = useState(null);
+  const [editingCaptainNames, setEditingCaptainNames] = useState({});
+  const [editingTeamNames, setEditingTeamNames] = useState({});
 
   const fetchData = async () => {
     console.log("Fetching data...");
@@ -156,6 +158,47 @@ const DraftMaster = () => {
     }
   };
 
+  const updateCaptainDetails = async (captainId) => {
+    const newName = editingCaptainNames[captainId];
+    const newTeam = editingTeamNames[captainId];
+    
+    if (!newName && !newTeam) {
+      alert("Please enter a new name or team name to update.");
+      return;
+    }
+
+    try {
+      const response = await fetch(`https://rbl-auction.onrender.com/api/captains/${captainId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: newName || undefined,
+          team: newTeam || undefined
+        }),
+      });
+      
+      if (response.ok) {
+        fetchData(); // Refresh data after update
+        // Clear the editing states
+        setEditingCaptainNames(prev => {
+          const newState = { ...prev };
+          delete newState[captainId];
+          return newState;
+        });
+        setEditingTeamNames(prev => {
+          const newState = { ...prev };
+          delete newState[captainId];
+          return newState;
+        });
+      } else {
+        alert("Failed to update captain details");
+      }
+    } catch (error) {
+      console.error("Error updating captain details:", error);
+      alert("Error updating captain details");
+    }
+  };
+
   useEffect(() => {
     console.log("Component mounted. Fetching initial data...");
     fetchData();
@@ -172,9 +215,39 @@ const DraftMaster = () => {
           {captains.map((captain) => (
             <li key={captain._id} className="captain-item">
               <div className="captain-info">
-                {captain.name} ({captain.team}) - Remaining Budget: ${captain.budget}
+                <div className="name-edit">
+                  <input
+                    type="text"
+                    value={editingCaptainNames[captain._id] || ""}
+                    onChange={(e) =>
+                      setEditingCaptainNames((prev) => ({
+                        ...prev,
+                        [captain._id]: e.target.value,
+                      }))
+                    }
+                    placeholder={captain.name}
+                  />
+                  <input
+                    type="text"
+                    value={editingTeamNames[captain._id] || ""}
+                    onChange={(e) =>
+                      setEditingTeamNames((prev) => ({
+                        ...prev,
+                        [captain._id]: e.target.value,
+                      }))
+                    }
+                    placeholder={captain.team}
+                  />
+                  <button
+                    onClick={() => updateCaptainDetails(captain._id)}
+                    className="update-captain-button"
+                  >
+                    Update Details
+                  </button>
+                </div>
+                <div>Remaining Budget: ${captain.budget}</div>
               </div>
-              <div>
+              <div className="budget-edit">
                 <input
                   type="number"
                   min="0"
