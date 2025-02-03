@@ -33,6 +33,7 @@ const AuctionLog = () => {
             <h2>{currentPlayer.name}</h2>
             <p>Position: {currentPlayer.position}</p>
             <p>Age: {currentPlayer.age}</p>
+            <p>Height: {currentPlayer.contact}</p>
             <p>Prior Team: {currentPlayer.priorTeam}</p>
             <p>Availability: {currentPlayer.availability}</p>
             <p>

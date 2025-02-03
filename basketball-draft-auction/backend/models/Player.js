@@ -4,7 +4,7 @@ const playerSchema = new mongoose.Schema({
   name: { type: String, required: true },
   position: { type: String, required: true },
   contact: { type: String },
-  startingPrice: { type: Number, required: true },
+  startingPrice: { type: Number, default: 50 }, // Default value for startingPrice
   auctioned: { type: Boolean, default: false },
   priorTeam: {
     type: String,
@@ -12,7 +12,7 @@ const playerSchema = new mongoose.Schema({
   },
   availability: {
     type: String,
-    default: 'Available'
+    default: 'Unknown'
   },
   age: {
     type: Number,
