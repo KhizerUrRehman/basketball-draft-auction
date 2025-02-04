@@ -121,7 +121,7 @@ const PlayerPool = () => {
               <h2>{player.name}</h2>
               <div className="player-age">Position: {player.position}</div>
               <div className="player-age">Height: {player.contact}</div>
-              <div className="player-age">Starting Price: ${player.startingPrice}</div>
+              <div className="player-age">Expected starting bid: ${player.startingPrice}</div>
               <div className="player-age">Age: {player.age}</div>
               <div className="player-prior-team">Prior Team: {player.priorTeam}</div>
               <div className="player-availability">Status: {player.availability}</div>

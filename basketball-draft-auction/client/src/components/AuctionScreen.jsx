@@ -281,7 +281,7 @@ const AuctionScreen = () => {
             <h1>Auction for: {currentPlayer.name}</h1>
             <p>Position: {currentPlayer.position}</p>
             <p>Height: {currentPlayer.contact}</p>
-            <p>Starting Price: ${currentPlayer.startingPrice}</p>
+            <p>Expected starting bid: ${currentPlayer.startingPrice}</p>
             <p>
               Current Winning Bid: ${winningBid?.bid || "None"} by {" "}
               {winningBid?.captain || "No Captain"}
