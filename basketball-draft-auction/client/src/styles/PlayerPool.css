@@ -57,3 +57,56 @@
   margin: 10px;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 }
+
+/* Add these filter control styles */
+.filter-controls {
+  display: flex;
+  gap: 20px;
+  margin: 20px;
+  padding: 15px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.position-filters, .sort-controls {
+  flex: 1;
+}
+
+.position-filters h3, .sort-controls h3 {
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.checkbox-group {
+  display: flex;
+  gap: 15px;
+}
+
+.checkbox-group label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.checkbox-group input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.sort-controls select {
+  width: 200px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: white;
+  cursor: pointer;
+}
+
+.sort-controls select:focus {
+  outline: none;
+  border-color: #0056b3;
+  box-shadow: 0 0 0 2px rgba(0,86,179,0.1);
+}
