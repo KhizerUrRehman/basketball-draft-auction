@@ -16,13 +16,6 @@ const AuctionScreen = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [availablePlayers, setAvailablePlayers] = useState([]);
-  const [selectedPositions, setSelectedPositions] = useState({
-    Guard: false,
-    Forward: false,
-    Center: false
-  });
-  const [sortBy, setSortBy] = useState('price'); // 'price' or 'availability'
-  const [sortOrder, setSortOrder] = useState('ascending');
 
   // Fetch players and captains
   const fetchAuctionData = async () => {
@@ -199,88 +192,12 @@ const AuctionScreen = () => {
     fetchAvailablePlayers();
   }, []);
 
-  const filteredPlayers = availablePlayers
-    .filter(player => {
-      // If no positions are selected, show all players
-      const anyPositionSelected = Object.values(selectedPositions).some(value => value);
-      if (!anyPositionSelected) return true;
-      
-      // Show only players in selected positions
-      return selectedPositions[player.position];
-    })
-    .sort((a, b) => {
-      if (sortBy === 'price') {
-        return sortOrder === 'ascending' 
-          ? a.startingPrice - b.startingPrice 
-          : b.startingPrice - a.startingPrice;
-      } else {
-        // Sort by availability
-        return sortOrder === 'ascending'
-          ? a.availability.localeCompare(b.availability)
-          : b.availability.localeCompare(a.availability);
-      }
-    });
+  const filteredPlayers = availablePlayers.filter(player =>
+    player.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className="auction-screen">
-      <div className="filter-controls">
-        <div className="position-filters">
-          <h3>Filter by Position:</h3>
-          <div className="checkbox-group">
-            <label>
-              <input
-                type="checkbox"
-                checked={selectedPositions.Guard}
-                onChange={() => setSelectedPositions(prev => ({
-                  ...prev,
-                  Guard: !prev.Guard
-                }))}
-              />
-              Guard
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={selectedPositions.Forward}
-                onChange={() => setSelectedPositions(prev => ({
-                  ...prev,
-                  Forward: !prev.Forward
-                }))}
-              />
-              Forward
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={selectedPositions.Center}
-                onChange={() => setSelectedPositions(prev => ({
-                  ...prev,
-                  Center: !prev.Center
-                }))}
-              />
-              Center
-            </label>
-          </div>
-        </div>
-
-        <div className="sort-controls">
-          <h3>Sort by:</h3>
-          <select 
-            value={`${sortBy}-${sortOrder}`}
-            onChange={(e) => {
-              const [newSortBy, newSortOrder] = e.target.value.split('-');
-              setSortBy(newSortBy);
-              setSortOrder(newSortOrder);
-            }}
-          >
-            <option value="price-ascending">Price (Low to High)</option>
-            <option value="price-descending">Price (High to Low)</option>
-            <option value="availability-ascending">Availability (A to Z)</option>
-            <option value="availability-descending">Availability (Z to A)</option>
-          </select>
-        </div>
-      </div>
-
       <div className="start-auction-section">
         <h2>Start New Auction</h2>
         <div className="player-search">
@@ -364,7 +281,7 @@ const AuctionScreen = () => {
             <h1>Auction for: {currentPlayer.name}</h1>
             <p>Position: {currentPlayer.position}</p>
             <p>Height: {currentPlayer.contact}</p>
-            <p>Expected starting bid: ${currentPlayer.startingPrice}</p>
+            <p>Expected starting bid: ${currentPlayer.startingPrice}</p>
             <p>
               Current Winning Bid: ${winningBid?.bid || "None"} by {" "}
               {winningBid?.captain || "No Captain"}
