@@ -84,13 +84,13 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-// Update a player's price
+// Update a player's details
 router.put("/:id", async (req, res) => {
-  const { name, position, priorTeam, availability, age, startingPrice } = req.body; // Include `startingPrice`
+  const { name, position, priorTeam, availability, age, startingPrice, contact } = req.body; // Added contact
   try {
     const updatedPlayer = await Player.findByIdAndUpdate(
       req.params.id,
-      { name, position, priorTeam, availability, age, startingPrice }, // Update `startingPrice`
+      { name, position, priorTeam, availability, age, startingPrice, contact }, // Added contact
       { new: true }
     );
     if (!updatedPlayer) {
