@@ -23,7 +23,7 @@ const DraftMaster = () => {
     startingPrice: ''
   });
   const [editingAvailability, setEditingAvailability] = useState({});
-  const [editingHeight, setEditingHeight] = useState({});
+  const [editingContact, setEditingContact] = useState({});
 
   const fetchData = async () => {
     console.log("Fetching data...");
@@ -252,9 +252,9 @@ const DraftMaster = () => {
   const updatePlayerDetails = async (playerId) => {
     const newPrice = editingPrices[playerId];
     const newAvailability = editingAvailability[playerId];
-    const newHeight = editingHeight[playerId];
+    const newContact = editingContact[playerId];
     
-    if (!newPrice && !newAvailability && !newHeight) {
+    if (!newPrice && !newAvailability && !newContact) {
       alert("No changes to update");
       return;
     }
@@ -266,7 +266,7 @@ const DraftMaster = () => {
         body: JSON.stringify({
           ...(newPrice && { startingPrice: parseInt(newPrice) }),
           ...(newAvailability && { availability: newAvailability }),
-          ...(newHeight && { height: newHeight })
+          ...(newContact && { contact: newContact })
         }),
       });
 
@@ -283,7 +283,7 @@ const DraftMaster = () => {
           delete newState[playerId];
           return newState;
         });
-        setEditingHeight(prev => {
+        setEditingContact(prev => {
           const newState = { ...prev };
           delete newState[playerId];
           return newState;
@@ -438,7 +438,7 @@ const DraftMaster = () => {
                 <input
                   type="number"
                   min="0"
-                  value={editingPrices[player._id] || ""}
+                  value={editingPrices[player._id] || player.startingPrice}
                   onChange={(e) => setEditingPrices(prev => ({
                     ...prev,
                     [player._id]: e.target.value
@@ -446,23 +446,20 @@ const DraftMaster = () => {
                   placeholder="Edit Price"
                   className="edit-input"
                 />
-                <select
-                  value={editingAvailability[player._id] || ""}
+                <input
+                  type="text"
+                  value={editingAvailability[player._id] || player.availability}
                   onChange={(e) => setEditingAvailability(prev => ({
                     ...prev,
                     [player._id]: e.target.value
                   }))}
-                  className="edit-select"
-                >
-                  <option value="">Edit Availability</option>
-                  <option value="Available">Available</option>
-                  <option value="Injured">Injured</option>
-                  <option value="Unavailable">Unavailable</option>
-                </select>
+                  placeholder="Edit Availability"
+                  className="edit-input"
+                />
                 <input
                   type="text"
-                  value={editingHeight[player._id] || ""}
-                  onChange={(e) => setEditingHeight(prev => ({
+                  value={editingContact[player._id] || player.contact}
+                  onChange={(e) => setEditingContact(prev => ({
                     ...prev,
                     [player._id]: e.target.value
                   }))}
