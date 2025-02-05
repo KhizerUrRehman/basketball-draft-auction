@@ -22,6 +22,8 @@ const DraftMaster = () => {
     availability: 'Available',
     startingPrice: ''
   });
+  const [editingAvailability, setEditingAvailability] = useState({});
+  const [editingHeight, setEditingHeight] = useState({});
 
   const fetchData = async () => {
     console.log("Fetching data...");
@@ -247,6 +249,53 @@ const DraftMaster = () => {
     }
   };
 
+  const updatePlayerDetails = async (playerId) => {
+    const newPrice = editingPrices[playerId];
+    const newAvailability = editingAvailability[playerId];
+    const newHeight = editingHeight[playerId];
+    
+    if (!newPrice && !newAvailability && !newHeight) {
+      alert("No changes to update");
+      return;
+    }
+
+    try {
+      const response = await fetch(`https://rbl-auction.onrender.com/api/players/${playerId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...(newPrice && { startingPrice: parseInt(newPrice) }),
+          ...(newAvailability && { availability: newAvailability }),
+          ...(newHeight && { height: newHeight })
+        }),
+      });
+
+      if (response.ok) {
+        fetchData();
+        // Clear the editing states
+        setEditingPrices(prev => {
+          const newState = { ...prev };
+          delete newState[playerId];
+          return newState;
+        });
+        setEditingAvailability(prev => {
+          const newState = { ...prev };
+          delete newState[playerId];
+          return newState;
+        });
+        setEditingHeight(prev => {
+          const newState = { ...prev };
+          delete newState[playerId];
+          return newState;
+        });
+      } else {
+        alert("Failed to update player details");
+      }
+    } catch (error) {
+      console.error("Error updating player details:", error);
+    }
+  };
+
   useEffect(() => {
     console.log("Component mounted. Fetching initial data...");
     fetchData();
@@ -385,21 +434,46 @@ const DraftMaster = () => {
               <div className="player-info">
                 {player.name} ({player.position}) - ${player.startingPrice}
               </div>
-              <div className="price-edit">
+              <div className="player-edit-controls">
                 <input
                   type="number"
                   min="0"
                   value={editingPrices[player._id] || ""}
-                  onChange={(e) =>
-                    handlePriceChange(player._id, e.target.value)
-                  }
+                  onChange={(e) => setEditingPrices(prev => ({
+                    ...prev,
+                    [player._id]: e.target.value
+                  }))}
                   placeholder="Edit Price"
+                  className="edit-input"
+                />
+                <select
+                  value={editingAvailability[player._id] || ""}
+                  onChange={(e) => setEditingAvailability(prev => ({
+                    ...prev,
+                    [player._id]: e.target.value
+                  }))}
+                  className="edit-select"
+                >
+                  <option value="">Edit Availability</option>
+                  <option value="Available">Available</option>
+                  <option value="Injured">Injured</option>
+                  <option value="Unavailable">Unavailable</option>
+                </select>
+                <input
+                  type="text"
+                  value={editingHeight[player._id] || ""}
+                  onChange={(e) => setEditingHeight(prev => ({
+                    ...prev,
+                    [player._id]: e.target.value
+                  }))}
+                  placeholder="Edit Height"
+                  className="edit-input"
                 />
                 <button
-                  className="update-price-button"
-                  onClick={() => updatePrice(player._id)}
+                  className="update-button"
+                  onClick={() => updatePlayerDetails(player._id)}
                 >
-                  Update Price
+                  Update Details
                 </button>
               </div>
               <div className="assign-controls">

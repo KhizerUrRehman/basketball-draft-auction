@@ -88,15 +88,24 @@ const PlayerPool = () => {
       return selectedPositions[player.position];
     })
     .sort((a, b) => {
-      if (sortBy === 'price') {
-        return sortOrder === 'ascending' 
-          ? a.startingPrice - b.startingPrice 
-          : b.startingPrice - a.startingPrice;
-      } else {
-        // Sort by availability
-        return sortOrder === 'ascending'
-          ? a.availability.localeCompare(b.availability)
-          : b.availability.localeCompare(a.availability);
+      switch(sortBy) {
+        case 'price':
+          return sortOrder === 'ascending' 
+            ? a.startingPrice - b.startingPrice 
+            : b.startingPrice - a.startingPrice;
+        case 'availability':
+          return sortOrder === 'ascending'
+            ? a.availability.localeCompare(b.availability)
+            : b.availability.localeCompare(a.availability);
+        case 'height':
+          // Handle cases where height might be undefined
+          if (!a.height) return sortOrder === 'ascending' ? 1 : -1;
+          if (!b.height) return sortOrder === 'ascending' ? -1 : 1;
+          return sortOrder === 'ascending'
+            ? a.height.localeCompare(b.height)
+            : b.height.localeCompare(a.height);
+        default:
+          return 0;
       }
     });
 
@@ -158,6 +167,8 @@ const PlayerPool = () => {
             <option value="price-descending">Price (High to Low)</option>
             <option value="availability-ascending">Availability (A to Z)</option>
             <option value="availability-descending">Availability (Z to A)</option>
+            <option value="height-ascending">Height (Low to High)</option>
+            <option value="height-descending">Height (High to Low)</option>
           </select>
         </div>
       </div>
