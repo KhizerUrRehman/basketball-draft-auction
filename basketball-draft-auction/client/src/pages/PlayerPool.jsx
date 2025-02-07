@@ -77,6 +77,23 @@ const PlayerPool = () => {
     setFilteredPlayers(filtered);
   };
 
+  // Add this helper function at the top of your file
+  const heightToInches = (height) => {
+    if (!height) return 0;
+    const parts = height.split("'");
+    if (parts.length !== 2) return 0;
+    const feet = parseInt(parts[0]) || 0;
+    const inches = parseInt(parts[1]) || 0;
+    return (feet * 12) + inches;
+  };
+
+  // Add this helper function at the top of your file
+  const availabilityToPercent = (availability) => {
+    if (!availability) return 0;
+    const match = availability.match(/(\d+)%/);
+    return match ? parseInt(match[1]) : 0;
+  };
+
   // Update the filtering and sorting logic
   const filteredAndSortedPlayers = players
     .filter(player => {
@@ -94,16 +111,17 @@ const PlayerPool = () => {
             ? a.startingPrice - b.startingPrice 
             : b.startingPrice - a.startingPrice;
         case 'availability':
-          return sortOrder === 'ascending'
-            ? a.availability.localeCompare(b.availability)
-            : b.availability.localeCompare(a.availability);
+          const percentA = availabilityToPercent(a.availability);
+          const percentB = availabilityToPercent(b.availability);
+          return sortOrder === 'ascending' 
+            ? percentA - percentB 
+            : percentB - percentA;
         case 'height':
-          // Handle cases where height might be undefined
-          if (!a.height) return sortOrder === 'ascending' ? 1 : -1;
-          if (!b.height) return sortOrder === 'ascending' ? -1 : 1;
-          return sortOrder === 'ascending'
-            ? a.height.localeCompare(b.height)
-            : b.height.localeCompare(a.height);
+          const heightA = heightToInches(a.contact);
+          const heightB = heightToInches(b.contact);
+          return sortOrder === 'ascending' 
+            ? heightA - heightB 
+            : heightB - heightA;
         default:
           return 0;
       }
