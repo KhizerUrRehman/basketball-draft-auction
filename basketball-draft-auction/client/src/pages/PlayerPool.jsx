@@ -183,8 +183,8 @@ const PlayerPool = () => {
           >
             <option value="price-ascending">Price (Low to High)</option>
             <option value="price-descending">Price (High to Low)</option>
-            <option value="availability-ascending">Availability (A to Z)</option>
-            <option value="availability-descending">Availability (Z to A)</option>
+            <option value="availability-ascending">Availability (Low to High)</option>
+            <option value="availability-descending">Availability (High to Low)</option>
             <option value="height-ascending">Height (Low to High)</option>
             <option value="height-descending">Height (High to Low)</option>
           </select>
