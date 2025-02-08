@@ -48,21 +48,29 @@
 }
 
 .team-logos {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);  /* First row of 5 */
+  grid-template-rows: auto auto;          /* Two rows */
+  gap: 20px;                             /* Space between logos */
   margin: 20px 0;
   padding: 20px;
+  justify-items: center;
+}
+
+/* Target the last 4 logos to center them in the second row */
+.team-logos img:nth-last-child(-n+4) {
+  grid-column: span 1;
+  transform: translateX(50%);  /* Shift the last row right to center it */
 }
 
 .team-logos img {
-  width: 80px;  /* Adjust size as needed */
-  height: 80px;  /* Adjust size as needed */
+  width: 80px;
+  height: 80px;
   object-fit: contain;
   transition: transform 0.2s;
 }
 
-.team-logos img:hover {
-  transform: scale(1.1);
-  cursor: pointer;
+/* Override transform for last row when hovering */
+.team-logos img:nth-last-child(-n+4):hover {
+  transform: translateX(50%) scale(1.1);
 }
