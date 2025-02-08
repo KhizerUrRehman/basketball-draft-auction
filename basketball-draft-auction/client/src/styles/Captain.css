@@ -46,3 +46,23 @@
   font-size: 14px;
   color: #666;
 }
+
+.team-logos {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: 20px 0;
+  padding: 20px;
+}
+
+.team-logos img {
+  width: 80px;  /* Adjust size as needed */
+  height: 80px;  /* Adjust size as needed */
+  object-fit: contain;
+  transition: transform 0.2s;
+}
+
+.team-logos img:hover {
+  transform: scale(1.1);
+  cursor: pointer;
+}
