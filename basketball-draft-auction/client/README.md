@@ -1,3 +1,15 @@
+# Instructions for future RBL when you inevitably forget how this all works
+
+Go to render.com, login with GMAIL
+Resume service for rbl-auction-app(the frontend static site)
+Resume service for rbl-auction (db server)
+Go to mongodb.com, login via gmail, cluster(14900) will be inactive, enable it, data is in the collection->test
+In git desktop find rbl-auction-app files, run resetdatabase.js (right click and run via Visual Studio)
+Populate SeedData with the new draftees, then run seeddata.js
+The site has a page you can manually navigate to control auction -> /auction
+YOLO
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
