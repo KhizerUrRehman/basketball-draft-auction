@@ -22,14 +22,15 @@ const seedData = async () => {
 
   try {
     // Clear existing data
-    //await Captain.deleteMany({});
+    await Captain.deleteMany({});
     await Player.deleteMany({});
-/*
+    console.log("Existing captains and players deleted");
+
     // Add captains
     
     const captains = [
-      { name: "Zakaria", team: "Pakora Phoenix", budget: 1000, initialBudget: 1000, players: [] },
-      { name: "Usman", team: "Khajoor Knights", budget: 1000, initialBudget: 1000, players: [] },
+      { name: "Shees", team: "Pakora Phoenix", budget: 1000, initialBudget: 1000, players: [] },
+      { name: "Tahama", team: "Khajoor Knights", budget: 1000, initialBudget: 1000, players: [] },
       { name: "Ammar", team: "Sharbat Sorcerors", budget: 1000, initialBudget: 1000, players: [] },
       { name: "Shehzar", team: "Samosa Spartans", budget: 1000, initialBudget: 1000, players: [] },
       { name: "Raamish", team: "Fruitchaat Falcons", budget: 1000, initialBudget: 1000, players: [] },
@@ -40,7 +41,7 @@ const seedData = async () => {
     
     
     const savedCaptains = await Captain.insertMany(captains);
-*/
+
     // Add players
     const players = [
       { name: "Kenneth Johnson", age: 26, position: "Forward", priorTeam: "Mamba", availability: "Available through out", contact: "6'0" },
@@ -134,7 +135,7 @@ const seedData = async () => {
       { name: "Aisha Ijlal", age: 24, position: "Guard", priorTeam: "Omega", availability: "100%", contact: "5'6" },
       { name: "Zafar", age: 34, position: "Forward", priorTeam: "23SB", availability: "100%", contact: "6'0" }
     ];
-    
+   
      // Set starting price to 50 for each player
     players.forEach(player => {
       player.startingPrice = 50;
@@ -142,8 +143,9 @@ const seedData = async () => {
     const savedPlayers = await Player.insertMany(players);
 
     console.log("Data seeded successfully");
-    //console.log("Captains:", savedCaptains);
+    console.log("Captains:", savedCaptains);
     console.log("Players:", savedPlayers);
+ 
 
     mongoose.connection.close();
   } catch (error) {

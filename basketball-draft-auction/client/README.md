@@ -7,6 +7,7 @@ Go to mongodb.com, login via gmail, cluster(14900) will be inactive, enable it, 
 In git desktop find rbl-auction-app files, run resetdatabase.js (right click and run via Visual Studio)
 Populate SeedData with the new draftees, then run seeddata.js
 The site has a page you can manually navigate to control auction -> /auction
+The site has another page you can manually navigate to edit players and teams -> /draft-master
 YOLO
 
 

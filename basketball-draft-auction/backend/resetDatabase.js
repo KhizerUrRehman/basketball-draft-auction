@@ -3,7 +3,7 @@ const Captain = require('./models/Captain');
 const Player = require('./models/Player');
 
 // MongoDB connection string
-const mongoURI = 'mongodb+srv://admin:admin123@14900.xpyfq.mongodb.net/my-database?retryWrites=true&w=majority';
+const mongoURI = 'mongodb+srv://admin:admin123@14900.xpyfq.mongodb.net/test?retryWrites=true&w=majority';
 
 const resetDatabase = async () => {
   try {
