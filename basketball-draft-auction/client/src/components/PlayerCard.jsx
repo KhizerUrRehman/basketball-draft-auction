@@ -17,7 +17,7 @@ const PlayerCard = ({ player, onSelect }) => {
         <span className="value">{player.priorTeam}</span>
       </div>
       <div className="player-detail">
-        <span className="label">Status:</span>
+        <span className="label">Availability:</span>
         <span className="value">{player.availability}</span>
       </div>
     </div>
