@@ -43,10 +43,10 @@ const Captains = () => {
       <div className="team-logos">
        
         <img src={logo9} alt="Team 9 Logo" />
-        <img src={logo3} alt="Team 3 Logo" />
+        <img src={logo8} alt="Team 8 Logo" />
         <img src={logo5} alt="Team 5 Logo" />
         <img src={logo7} alt="Team 7 Logo" />
-        <img src={logo8} alt="Team 8 Logo" />
+        <img src={logo3} alt="Team 3 Logo" />
         <img src={logo4} alt="Team 4 Logo" />
       </div>
       {loading ? (
