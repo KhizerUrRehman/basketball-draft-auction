@@ -60,7 +60,7 @@
 /*
 .team-logos img:nth-last-child(-n+4) {
   grid-column: span 1;
-  transform: translateX(50%);  /* Shift the last row right to center it */
+  transform: translateX(50%);  
 }
 */
 .team-logos img {
