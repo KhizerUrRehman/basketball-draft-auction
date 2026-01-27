@@ -31,17 +31,19 @@ const Captains = () => {
   useEffect(() => {
     fetchCaptains();
   }, []);
-
+      /*
+      <img src={logo1} alt="Team 1 Logo" />
+      <img src={logo2} alt="Team 2 Logo" />
+      <img src={logo6} alt="Team 6 Logo" />
+      */
   return (
     <div className="captains-container">
       <h1>Captains Dashboard</h1>
       <div className="team-logos">
-        <img src={logo1} alt="Team 1 Logo" />
-        <img src={logo2} alt="Team 2 Logo" />
+       
         <img src={logo3} alt="Team 3 Logo" />
         <img src={logo4} alt="Team 4 Logo" />
         <img src={logo5} alt="Team 5 Logo" />
-        <img src={logo6} alt="Team 6 Logo" />
         <img src={logo7} alt="Team 7 Logo" />
         <img src={logo8} alt="Team 8 Logo" />
         <img src={logo9} alt="Team 9 Logo" />
