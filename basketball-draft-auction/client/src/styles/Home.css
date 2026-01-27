@@ -2,9 +2,12 @@
 .home-container {
   text-align: center;
   padding: 20px;
-  width: 100%; /* Ensures the container spans the full width */
+  width: 100%; /* Ensure the container spans the full width */
   box-sizing: border-box; /* Include padding in width calculation */
   overflow: hidden; /* Prevents child elements from overflowing */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Ensures everything is centered */
 }
 
 /* Home title styling */
@@ -13,6 +16,8 @@
   color: #333;
   margin-bottom: 20px;
   width: 100%; /* Ensure it doesn't overflow */
+  word-wrap: break-word; /* Prevents text overflow */
+  overflow: hidden; /* Prevents text from overflowing */
 }
 
 /* Button container (ensure the buttons are responsive) */
@@ -22,6 +27,8 @@
   gap: 15px;
   flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
   width: 100%; /* Ensure the container takes full width */
+  padding: 0 10px; /* Prevents overflow from padding */
+  box-sizing: border-box;
 }
 
 /* Home button styling */
@@ -37,16 +44,25 @@
   flex-shrink: 0; /* Prevent buttons from shrinking */
   max-width: 200px; /* Set a max width to prevent excessive stretching */
   width: auto; /* Allow button to grow based on content */
+  box-sizing: border-box; /* Ensure padding doesn't cause overflow */
 }
 
+/* Home button hover effect */
 .home-button:hover {
   background-color: #0056b3;
 }
 
-/* Mobile adjustments */
-@media (max-width: 768px) {
+/* iPhone-specific adjustments (ensuring proper rendering on iPhone Safari) */
+@media only screen and (max-width: 768px) and (-webkit-min-device-pixel-ratio: 2) {
+  /* Targeting iPhones specifically */
+  .home-container {
+    width: 100%; /* Ensuring it's not constrained */
+    padding: 15px;
+  }
+
   .home-title {
     font-size: 1.5rem; /* Adjust title font size for smaller screens */
+    word-wrap: break-word; /* Prevents text overflow */
   }
 
   .home-buttons {
@@ -56,5 +72,6 @@
   .home-button {
     width: 100%; /* Ensure buttons take full width on mobile */
     max-width: none; /* Remove max-width for mobile */
+    padding: 12px; /* Adjust padding for better touch experience */
   }
 }
