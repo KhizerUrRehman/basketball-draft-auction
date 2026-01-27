@@ -15,6 +15,8 @@ body {
   color: white;
   font-family: Arial, sans-serif;
   width: 100%;
+  box-sizing: border-box;
+  overflow: hidden; /* Prevents anything from overflowing */
 }
 
 /* Ensuring container and navbar span the full width */
@@ -32,9 +34,15 @@ body {
 }
 
 .logo {
-  height: 60px;
-  width: auto;
+  height: auto;
+  width: 100%; /* Ensures the logo scales to fit the available space */
+  max-width: 120px;  /* Set max width for logo to avoid excessive stretching */
   margin-left: auto;
+  margin-right: auto; /* Center logo horizontally */
+  flex-grow: 0; /* Prevents logos from growing larger than their content */
+  flex-shrink: 1; /* Allows logos to shrink when necessary */
+  object-fit: contain; /* Maintains aspect ratio */
+  box-sizing: border-box; /* Ensures padding/borders are included in the element's width */
 }
 
 .nav-links {
@@ -218,5 +226,9 @@ body {
 
   .auction-container {
     padding: 10px; /* Adjust padding for mobile */
+  }
+
+  .logo {
+    max-width: 80px;  /* Adjust max width for smaller screens */
   }
 }
