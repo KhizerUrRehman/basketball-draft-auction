@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import "../styles/Captain.css";
-import logo1 from "../assets/logos/Dragons.png";  // Update with your actual filenames
-import logo2 from "../assets/logos/Wolves.png";
+//import logo1 from "../assets/logos/Dragons.png";  // Update with your actual filenames
+//import logo2 from "../assets/logos/Wolves.png";
 import logo3 from "../assets/logos/Spartans.png";
 import logo4 from "../assets/logos/Sorcerors.png";
 import logo5 from "../assets/logos/Knights.png";
-import logo6 from "../assets/logos/Panthers.png";
+//import logo6 from "../assets/logos/Panthers.png";
 import logo7 from "../assets/logos/Jets.png";
 import logo8 from "../assets/logos/Phoenix.png";
 import logo9 from "../assets/logos/Falcons.png";
