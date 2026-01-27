@@ -2,13 +2,14 @@ import React, { useState, useEffect } from "react";
 import "../styles/Captain.css";
 //import logo1 from "../assets/logos/Dragons.png";  // Update with your actual filenames
 //import logo2 from "../assets/logos/Wolves.png";
+
+import logo9 from "../assets/logos/Falcons.png";
 import logo3 from "../assets/logos/Spartans.png";
-import logo4 from "../assets/logos/Sorcerors.png";
 import logo5 from "../assets/logos/Knights.png";
 //import logo6 from "../assets/logos/Panthers.png";
 import logo7 from "../assets/logos/Jets.png";
 import logo8 from "../assets/logos/Phoenix.png";
-import logo9 from "../assets/logos/Falcons.png";
+import logo4 from "../assets/logos/Sorcerors.png";
 const Captains = () => {
   const [captains, setCaptains] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -41,12 +42,12 @@ const Captains = () => {
       <h1>Captains Dashboard</h1>
       <div className="team-logos">
        
+        <img src={logo9} alt="Team 9 Logo" />
         <img src={logo3} alt="Team 3 Logo" />
-        <img src={logo4} alt="Team 4 Logo" />
         <img src={logo5} alt="Team 5 Logo" />
         <img src={logo7} alt="Team 7 Logo" />
         <img src={logo8} alt="Team 8 Logo" />
-        <img src={logo9} alt="Team 9 Logo" />
+        <img src={logo4} alt="Team 4 Logo" />
       </div>
       {loading ? (
         <p>Loading...</p>
