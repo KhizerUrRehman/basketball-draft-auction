@@ -6,6 +6,7 @@
 .captains-container h1 {
   text-align: center;
   margin-bottom: 20px;
+  width: 100%;
 }
 
 .captains-list {
@@ -73,4 +74,15 @@
 /* Override transform for last row when hovering */
 .team-logos img:nth-last-child(-n+4):hover {
   transform: translateX(50%) scale(1.1);
+}
+
+@media (max-width: 768px) {
+  .captains-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Adjust columns for mobile */
+    gap: 10px;
+  }
+  .captains-container h1 {
+    font-size: 1.5em; /* Adjust heading size for mobile */
+  }
 }

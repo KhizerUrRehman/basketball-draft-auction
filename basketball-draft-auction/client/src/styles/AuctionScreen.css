@@ -17,6 +17,12 @@ body {
   width: 100%;
 }
 
+/* Ensuring container and navbar span the full width */
+.auction-container, .auction-logs {
+  width: 100%; /* Make sure the container is also 100% width */
+  padding: 20px;
+}
+
 .navbar-title {
   font-size: 24px;
   font-weight: bold;
@@ -204,3 +210,13 @@ body {
   background: #555;
 }
 
+@media (max-width: 768px) {
+  .navbar {
+    width: 100%; /* Ensure the navbar stretches on smaller screens */
+    padding: 10px;
+  }
+
+  .auction-container {
+    padding: 10px; /* Adjust padding for mobile */
+  }
+}
